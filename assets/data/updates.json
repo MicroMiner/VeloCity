@@ -1,7 +1,19 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T12:12:50.539Z",
+  "updatedAt": "2026-11-21T17:31:48.779Z",
   "updates": [
+    {
+      "id": "discord-1573740445622607972",
+      "source": "discord",
+      "sourceId": "1573740445622607972",
+      "title": "Neu auf VeloCity: Spielerprofile, Abmeldung & mehr",
+      "category": "Info",
+      "excerpt": "",
+      "content": "**Dein Spielerprofil – /profil**\nJeder Spieler hat jetzt ein eigenes Profil. Dort siehst du:\n- deine Spielzeit (gesamt, letzte 7 und 30 Tage)\n- deine Serie: wie viele Tage du am Stück aktiv warst\n- deinen *Aktivitäts-Score* von 0 bis 100\n- einen Kalender der letzten 5 Wochen: grün = gespielt, grau = nicht da, blau = abgemeldet\nMit **/profil <Name>** kannst du auch andere Spieler ansehen. Mit **/profil suche <Name>** findest du jeden, der schon einmal auf VeloCity war.\n\n**Abmelden – /abwesend**\nFerien oder Pause? Melde dich einfach ab:\n- **/abwesend 24.12. Ferien** – abgemeldet bis zum 24.12.\n- **/abwesend 14t** – abgemeldet für 14 Tage\n- **/abwesend aus** – wieder zurück\nAbgemeldete Tage zählen für den Score als aktiv. Deine Ferien kosten dich also nichts.\n\n**Shop**\n- Die Wertanzeige an Items ist gefixt.\n- Die Preise für Verzauberungen sind noch in Arbeit.\n\n**Jobs**\n- Das Jobmenü (**/jobs**) hat ein neues, übersichtliches Layout.\n- Ist dein Konto voll, geht dein Lohn nicht verloren. Er wird automatisch nachgezahlt, sobald wieder Platz ist.\n- Weniger Lag beim Abbauen.\n\n**Deine Items sind gesichert**\nDein Inventar, deine Endertruhe und deine EnderChest-Seiten werden automatisch gesichert: beim Verlassen, beim Tod und regelmässig. Falls einmal etwas verloren geht, kann das Team es wiederherstellen.\n\nViel Spass beim Spielen!\nEuer VeloCity-Team",
+      "publishedAt": "2026-11-21T16:42:40.920000+00:00",
+      "image": "assets/img/news/discord-1573740445622607972-1573740445178142783.png",
+      "url": "https://discord.com/channels/@me/1566486495303434350/1573740445622607972"
+    },
     {
       "id": "discord-1569299289593749655",
       "source": "discord",
