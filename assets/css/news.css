@@ -52,8 +52,10 @@
 .news-page .news-body { color: #cfdeee; line-height: 1.7; overflow-wrap: anywhere; }
 .news-page .news-body p { margin: 12px 0; white-space: pre-line; }
 .news-page .news-body h2,.news-page .news-body h3 { color: var(--text-primary); margin: 24px 0 10px; padding-left: 12px; border-left: 3px solid var(--accent-gold); font-size: 1.2rem; }
-.news-page .news-body ul { padding-left: 24px; margin-block: 12px; }
+.news-page .news-body ul,.news-page .news-body ol { padding-left: 24px; margin-block: 12px; }
 .news-page .news-body li::marker { color: var(--accent-gold); }
+.news-page .news-gallery { display: grid; gap: 16px; margin: 28px 0 8px; }
+.news-page .news-gallery-image { display: block; width: 100%; height: auto; max-height: 720px; object-fit: contain; border-radius: 12px; border: 1px solid var(--panel-border); background: var(--input-bg); }
 .news-page .news-body a { color: var(--accent-gold); }
 .news-page .news-body blockquote { margin: 24px 0; padding: 14px 18px; border: 1px solid var(--gold-line); border-radius: 12px; background: rgba(255,210,31,.035); }
 .news-page .news-body code { padding: 2px 5px; border-radius: 4px; background: var(--input-bg); }
