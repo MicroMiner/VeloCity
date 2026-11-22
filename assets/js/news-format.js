@@ -18,9 +18,13 @@ export function markdown(text) {
   function flush(){if(paragraph.length){const p=element('p');inline(paragraph.join('\n'),p);result.append(p);paragraph=[];}list=null;}
   for(const line of String(text).split(/\r?\n/)) {
     if(!line.trim()){flush();continue;}
-    const h=/^#{1,3}\s+(.+)$/.exec(line),bullet=/^[-*]\s+(.+)$/.exec(line),quote=/^>\s?(.*)$/.exec(line);
+    const h=/^#{1,3}\s+(.+)$/.exec(line),bullet=/^[-*]\s+(.+)$/.exec(line),numbered=/^(\d{1,4})[.)]\s+(.+)$/.exec(line),quote=/^>\s?(.*)$/.exec(line);
     if(h){flush();const node=element('h2');inline(h[1],node);result.append(node);}
-    else if(bullet){if(paragraph.length)flush();if(!list){list=element('ul');result.append(list);}const li=element('li');inline(bullet[1],li);list.append(li);}
+    else if(bullet||numbered){
+      const tag=bullet?'ul':'ol';if(paragraph.length)flush();
+      if(list?.tagName.toLowerCase()!==tag){list=element(tag);if(numbered&&numbered[1]!=='1')list.start=Number(numbered[1]);result.append(list);}
+      const li=element('li');inline(bullet?bullet[1]:numbered[2],li);list.append(li);
+    }
     else if(quote){flush();const node=element('blockquote');inline(quote[1],node);result.append(node);}
     else {list=null;paragraph.push(line);}
   }
@@ -40,6 +44,12 @@ export function article(post, preview=false) {
   if(!preview){const back=element('a','news-back','← Zurück zur Übersicht');back.href='neuigkeiten.html';fragment.append(back);}
   fragment.append(metadata(post),element('h1','',post.title));const img=cover(post,'news-detail-cover');if(img)fragment.append(img);
   fragment.append(markdown(post.content));
+  const images=(Array.isArray(post.gallery)?post.gallery:[]).map(safeUrl).filter(Boolean);
+  if(images.length){
+    const gallery=element('div','news-gallery');
+    images.forEach((src,index)=>{const img=element('img','news-gallery-image');img.src=src;img.alt=post.title+' · Bild '+(index+1);img.loading='lazy';img.decoding='async';img.addEventListener('error',()=>img.remove(),{once:true});gallery.append(img);});
+    fragment.append(gallery);
+  }
   const footer=element('footer','news-detail-footer'),info=element('div');
   info.append(element('span','',post.publishedAt?'Veröffentlicht am '+dateFormatter.format(new Date(post.publishedAt)):'Noch nicht veröffentlicht'));
   info.append(element('span','',' · '+(post.author||'VeloCity')+(post.source==='discord'?' · Quelle: Discord':'')));

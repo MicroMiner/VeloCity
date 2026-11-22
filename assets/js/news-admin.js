@@ -1,6 +1,6 @@
-import { api, sessionKey, request, loadNews } from './news-data.js?v=news-admin-refresh-6';
+import { api, sessionKey, request, loadNews } from './news-data.js?v=news-gallery-1';
 import { createNewsImageEditor } from './news-image.js?v=news-image-fit-5';
-import { element, article, dateFormatter } from './news-format.js';
+import { element, article, dateFormatter } from './news-format.js?v=news-gallery-1';
 const $=id=>document.getElementById(id),panel=$('newsAdminPanel');
 let session=null,current=null,busy=false,dirty=false,changed=false,expiryTimer,canEdit=false;
 let knownPosts=new Map();

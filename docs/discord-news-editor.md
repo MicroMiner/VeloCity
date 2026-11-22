@@ -118,21 +118,37 @@ per Discord-REST gelesen; auch Bot-Anwendung und Zielkanal werden überprüft.
 
 ## Bedienung
 
-`/news erstellen` öffnet fünf Felder: Titel (1–160 Zeichen), Kategorie (bestehende
-fünf Kategorien), optionale Kurzbeschreibung (400), Inhalt (1–4000) und optionales
-Titelbild (JPEG/PNG/WebP/GIF, maximal 8 MB). Aktuelle Modal-Komponenten werden genutzt:
-Labels, Text Inputs, String Select und File Upload.
+`/news erstellen` öffnet fünf Felder (das Maximum eines Discord-Modals):
+
+| Feld | Vorgabe |
+| --- | --- |
+| Titel | Pflicht, 1–160 Zeichen |
+| Kategorie | Ankündigung, Update, Info, Changelog oder Wartung. Standard: Update |
+| Beitragsinhalt | Pflicht, 1–3500 Zeichen, Markdown direkt eingeben |
+| Anzeigebild (Discord & Website) | Optional, ein Bild, erscheint gross in Discord und auf der Website |
+| Weitere Bilder (nur Website) | Optional, bis 6 Bilder, erscheinen gross im Bericht auf der Website |
+
+Alle Bilder: JPEG, PNG, WebP oder GIF, je maximal 8 MB, zusammen maximal 24 MB
+(Discord erlaubt höchstens 25 MiB pro Nachricht). Die frühere Kurzbeschreibung
+entfällt. Der Inhalt ist auf 3500 Zeichen begrenzt, weil Discord in einer
+Komponenten-Nachricht insgesamt 4000 Zeichen Text erlaubt und Kopfzeile, Titel
+und Fusszeile Platz brauchen.
 
 Danach erscheint nur für den Ersteller eine Vorschau mit **Veröffentlichen,
-Bearbeiten, Abbrechen**. Bearbeiten füllt die Texte wieder aus. Ein bereits
-gewähltes Bild bleibt erhalten, wenn kein neues ausgewählt wird; Datei-Uploads
+Bearbeiten, Abbrechen, Formatierung**. Bearbeiten füllt die Texte wieder aus.
+Bereits gewählte Bilder bleiben erhalten, wenn ein Bildfeld leer bleibt; eine neue
+Auswahl ersetzt das Anzeigebild bzw. alle weiteren Bilder. Datei-Uploads
 können vom Modal selbst nicht als bereits ausgewählte Datei vorgefüllt werden.
 Entwürfe/Vorschauen laufen nach 15 Minuten ab.
 
 Erst Veröffentlichen erzeugt die Nachricht im konfigurierten Kanal. Es gibt keine
-automatischen Erwähnungen/Pings. Ein Bild wird aus der privaten Interaktion als
-öffentlicher Nachrichtenanhang neu hochgeladen, nicht bloss über den kurzlebigen
-Vorschaulink referenziert. Erfolgreich bestätigte Veröffentlichungen liefern den
+automatischen Erwähnungen/Pings. Bilder werden aus der privaten Interaktion als
+öffentliche Nachrichtenanhänge neu hochgeladen (`title-image.*`, `gallery-1.*` …),
+nicht bloss über die kurzlebigen Vorschaulinks referenziert. Die weiteren Bilder
+sind angehängt, werden aber von keiner Komponente eingebunden; Discord zeigt sie
+deshalb nicht an, der Website-Import findet sie trotzdem. Mit
+`discordNewsShowGallery = true` in `shared/discord-news.mjs` erscheinen sie in
+Discord zusätzlich als Galerie unter dem Text. Erfolgreich bestätigte Veröffentlichungen liefern den
 Discord-Link. Bei unklarem Netzwerkergebnis wird nicht blind erneut gesendet;
 stattdessen zuerst den News-Kanal prüfen. Atomare Statuswechsel plus Discord-Nonce
 verhindern doppelte Sendungen durch wiederholte oder parallele Klicks.
@@ -141,10 +157,16 @@ verhindern doppelte Sendungen durch wiederholte oder parallele Klicks.
 
 Normale menschliche Nachrichten behalten ihre bisherige Titel-/Textverarbeitung.
 Andere Bot-Nachrichten und Webhooks werden weiter ignoriert. Nur Nachrichten des
-durch den bestehenden Import-Token identifizierten Bots mit dem exakten Embed-Footer
-`VeloCity News · v1` werden als strukturierte News akzeptiert. Kategorie und
-Kurzbeschreibung stehen in Embed-Feldern, Titel und vollständiger Inhalt bleiben
-ungetrennt im Embed. Bot-ID, Marker und Feldgrenzen werden geprüft.
+durch den bestehenden Import-Token identifizierten Bots werden als strukturierte
+News akzeptiert, in drei Formaten:
+
+- **v3 (aktuell):** Komponenten-Nachricht (`IS_COMPONENTS_V2`). Kopfzeile, Titel,
+  Anzeigebild, Inhalt und Fusszeile tragen die festen Komponenten-IDs 101–105;
+  die Fusszeile enthält den Link `…/neuigkeiten.html#discord-news-v3`.
+- **v2:** Embed mit Marker-URL `#discord-news-v2`, Footer und Kategorie im Autor.
+- **v1:** Embed mit Footer `VeloCity News · v1`.
+
+Bot-ID, Marker und Feldgrenzen werden geprüft.
 
 Der Worker schreibt beim Discord-Veröffentlichen **keinen Beitrag in `news_posts`**.
 Die Übernahme auf die Webseite geschieht allein durch den bestehenden Kanalabgleich,
@@ -152,7 +174,11 @@ mit derselben Nachrichten-ID (`discord-<message-id>`). Wiederholte Importe bleib
 duplikatfrei. Änderungen in den gelesenen Nachrichten werden weiter übernommen;
 der bisherige 200-Nachrichten-Lesebereich und die Aufbewahrung älterer Beiträge bleiben.
 
-Strukturierte Titelbilder werden dabei nach `assets/img/news/` archiviert und mit
+Strukturierte Anzeigebilder und weitere Bilder werden dabei nach `assets/img/news/`
+archiviert (`discord-<Nachricht>-<Anhang>.<Endung>`); weitere Bilder landen als
+`gallery` im Beitrag von `updates.json`. Kann ein Bild nicht geladen werden, bleibt
+die bisherige Fassung des Beitrags stehen, der Workflow meldet eine Warnung und
+veröffentlicht die Website trotzdem; der nächste Lauf versucht es erneut. Die Bilder werden mit
 demselben Workflow veröffentlicht. Dadurch bleiben ältere Bilder auch nach Ablauf
 signierter Discord-CDN-Links verfügbar. Wiederholte Importe laden dieselbe Anhang-ID
 nicht erneut. Der bestehende optionale API-Bridge-Modus verarbeitet die strukturierten
@@ -167,11 +193,15 @@ Lokal geprüft, ohne produktive Discord-Nachrichten:
 
 - Signierte PINGs, ungültige Signaturen, veränderte Bodies, alte Zeitstempel.
 - Guild-/Rollen-/Benutzerfreigabe, Eigentümer, abgelaufene Entwürfe, entzogene Rollen.
-- Fünf Modal-Felder, Längengrenzen, Vorschau, Bearbeiten und Abbrechen.
-- Explizites Senden, Dateiprüfung, Nonce/Doppelklickschutz, sichere Fehlerfälle.
+- Fünf Modal-Felder inkl. Discord-Textgrenzen, Längengrenzen, Vorschau, Bearbeiten
+  (Bilder bleiben erhalten), zu viele Bilder und Abbrechen.
+- Explizites Senden als Komponenten-Nachricht, Anhänge (Anzeigebild sichtbar,
+  weitere Bilder nur angehängt), Textlimit, Website-Anstoss, Nonce/Doppelklickschutz,
+  sichere Fehlerfälle.
 - Tatsächlicher Importer als separater Prozess mit simuliertem Discord: normale
-  und strukturierte Nachrichten, voller Text/Kategorie/Kurzbeschreibung/Bild,
-  Bildarchivierung, Änderungen, Aufbewahrung und wiederholte Synchronisierung.
+  Nachrichten (inkl. `[Info]`), v1/v2-Embeds und v3-Komponenten, Anzeigebild und
+  weitere Bilder in Upload-Reihenfolge, Bildfehler ohne Abbruch, Änderungen,
+  Aufbewahrung und wiederholte Synchronisierung.
 - Idempotente Command-Registrierung und bestehende News-/Website-Authentifizierung.
 
 ```bash
@@ -206,13 +236,38 @@ vorübergehenden Fehlern wiederholt. Der öffentliche Nachrichten-POST wird nie
  automatisch wiederholt. Logs enthalten Ereignis, Entwurfs-ID, Verarbeitungsschritt,
 HTTP-Status und numerischen Discord-Fehlercode, keine Tokens oder Beitragsinhalte.
 
-Die neue Embed-Darstellung zeigt Kategorie im Kopf, farbige Seitenlinie,
-Beitragsinhalt, optionale Kurzbeschreibung, Titelbild und Veröffentlichungszeit.
-Der Importer erkennt sowohl bisherige v1-Nachrichten als auch das neue v2-Format.
+### Darstellung in Discord (v3)
+
+Neue Beiträge sind Komponenten-Nachrichten ohne Container und nutzen damit die
+volle Breite des Chats statt der schmalen Embed-Box:
+
+1. kleine Kopfzeile mit Kategorie-Symbol (📢 Ankündigung, 🔄 Update, ℹ️ Info,
+   📝 Changelog, 🛠️ Wartung),
+2. grosser Titel (`# Titel`),
+3. Anzeigebild in voller Breite,
+4. Trennlinie, Beitragsinhalt (Zwischentitel mit `##` werden gross dargestellt),
+5. Trennlinie und kleine Fusszeile mit Link zur News-Seite.
+
+Die frühere farbige Seitenlinie entfällt, weil sie nur mit der schmaleren
+Container-Box möglich ist; die Kategorie ist am Symbol erkennbar. Private
+Vorschau und Statusmeldungen verwenden dasselbe Format. Überschreitet eine
+private Vorschau mit langer Fehlermeldung das Textlimit, wird nur dort der
+Inhalt sichtbar gekürzt; Entwurf und veröffentlichter Beitrag bleiben vollständig.
+
+### Website sofort aktualisieren
+
+Nach erfolgreichem Senden stösst der Worker den Workflow **Sync and publish
+VeloCity news** per `workflow_dispatch` an. Er nutzt dafür den vorhandenen
+`GITHUB_TOKEN` (`GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH`). Der Token
+braucht dafür zusätzlich die Berechtigung **Actions: Read and write**
+(Fine-grained Token) bzw. den Scope `repo`/`workflow` (klassischer Token). Fehlt sie,
+meldet der Bot „beim nächsten regulären Abgleich (stündlich)“; sonst „in wenigen
+Minuten“. Ein Fehlschlag wird nur geloggt und verhindert nichts.
 
 Deployment: `node scripts/build-news-worker.mjs` ausführen und den Inhalt von
 `worker/dashboard-worker.mjs` im bestehenden Admin-/News-Worker veröffentlichen.
-Keine neue Datenbank, Secrets oder Befehlsregistrierung erforderlich.
+Keine neue Datenbank, keine neuen Secrets und keine erneute Befehlsregistrierung
+erforderlich. Vor dem Deployment geöffnete Vorschauen bitte neu erstellen.
 
 ### Formatierung im Discord-Editor
 Die private Vorschau enthält zusätzlich „Formatierung“. Die nur für den Ersteller
@@ -220,7 +275,8 @@ sichtbare Hilfe zeigt Markdown-Beispiele und öffnet über „Inhalt bearbeiten�
 vorausgefüllten Entwurf. Danach erneut die Vorschau erzeugen und erst bei Bedarf
 veröffentlichen. Die Hilfe verändert und veröffentlicht keinen Beitrag.
 
-Discord erlaubt im Embed keine frei wählbare Textfarbe für den Kategorie-Kopf
-und keine einstellbare Schriftgrösse des Titels. Die bestehenden Kategoriefarben
-bleiben als Seitenlinie erhalten. Das native Modal unterstützt keine eigene
-Rich-Text-Werkzeugleiste; Formatzeichen werden direkt im Inhaltsfeld eingegeben.
+Die Hilfe nennt nur Formate, die Discord und die Website gleich darstellen:
+`## Zwischentitel`, `**fett**`, `*kursiv*`, `` `Code` ``, `-`-Listen, nummerierte
+Listen (`1.`), `>`-Hinweise und `[Links](https://…)`. Das native Modal unterstützt
+keine eigene Rich-Text-Werkzeugleiste; Formatzeichen werden direkt im Inhaltsfeld
+eingegeben.

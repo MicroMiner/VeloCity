@@ -25,8 +25,9 @@ export async function loadNews() {
       try {
         const overlay=await request('/news/overlay');
         if(!Array.isArray(overlay.posts)||!Array.isArray(overlay.suppressedIds)||overlay.suppressedIds.some(id=>typeof id!=='string'))throw Error('Ungültige News-Verwaltungsdaten.');
-        const suppressed=new Set(overlay.suppressedIds);
-        posts=[...overlay.posts,...posts.filter(p=>!suppressed.has(p.id))];
+        const suppressed=new Set(overlay.suppressedIds),imported=new Map(posts.map(p=>[p.id,p]));
+        // Website edits do not store the imported website-only images; keep them.
+        posts=[...overlay.posts.map(p=>p.gallery||!imported.get(p.id)?.gallery?p:{...p,gallery:imported.get(p.id).gallery}),...posts.filter(p=>!suppressed.has(p.id))];
       } catch(error) {
         // Older Workers do not have overlays yet. Other failures must not
         // resurrect posts deleted through website administration.

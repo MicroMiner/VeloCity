@@ -1,5 +1,5 @@
-import { loadNews, request, api, newsSource } from './news-data.js?v=news-editor-3';
-import { element, cover, metadata, article, safeUrl } from './news-format.js';
+import { loadNews, request, api, newsSource } from './news-data.js?v=news-gallery-1';
+import { element, cover, metadata, article, safeUrl } from './news-format.js?v=news-gallery-1';
 const container=document.getElementById('newsList'),preview=container.dataset.preview==='true';
 function card(post) {
  const card=element('article',preview?'news-preview':'news-blog-card');if(!preview)card.dataset.newsId=post.id;
@@ -30,5 +30,5 @@ document.addEventListener('news-changed',render);
 if(!preview){
  const invite=safeUrl(window.VELOCITY_CONFIG?.discordInvite),link=document.getElementById('discordInvite');
  if(invite&&/^https:\/\/(?:discord\.gg\/|discord\.com\/invite\/)[a-zA-Z0-9_-]+\/?$/.test(invite)){link.href=invite;link.hidden=false;}
- await import('./news-admin.js?v=news-admin-refresh-6');
+ await import('./news-admin.js?v=news-gallery-1');
 }

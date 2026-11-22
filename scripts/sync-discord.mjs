@@ -3,7 +3,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { createNewsBridge } from "./discord-news-client.mjs";
 import { parseStructuredDiscordNews } from '../shared/discord-news.mjs';
-import { cacheDiscordNewsImage } from './discord-news-images.mjs';
+import { cacheDiscordNewsImage, cacheDiscordAttachment } from './discord-news-images.mjs';
 
 const token = process.env.DISCORD_BOT_TOKEN;
 const channel = process.env.DISCORD_CHANNEL_ID;
@@ -42,7 +42,7 @@ for (let page = 0; page < 2; page++) {
   before = batch.at(-1).id;
 }
 
-const categories = new Set(["Ankündigung", "Update", "Changelog", "Wartung"]);
+const categories = new Set(["Ankündigung", "Update", "Info", "Changelog", "Wartung"]);
 const selfResponse=await fetch('https://discord.com/api/v10/users/@me',{headers:{Authorization:`Bot ${token}`}});
 if(!selfResponse.ok)throw Error('Discord bot identity lookup failed.');
 const self=await selfResponse.json();
@@ -55,12 +55,21 @@ async function structuredPost(message){
   if(message.author?.bot&&String(message.author.id)===self.id){
    const embed=message.embeds?.[0],attachments=Array.isArray(message.attachments)?message.attachments:[];
    // Public IDs and schema flags only: no token, content, title or signed image URLs.
-   console.log(JSON.stringify({event:'discord_news_skipped_bot_post',messageId:String(message.id),embedCount:message.embeds?.length||0,webhook:Boolean(message.webhook_id),footerVersion:embed?.footer?.text==='VeloCity News · v1'?'v1':embed?.footer?.text==='VeloCity · Neuigkeiten & Changelog'?'v2':'other',markerUrlMatches:embed?.url==='https://microminer.github.io/VeloCity/neuigkeiten.html#discord-news-v2',authorMatches:Boolean(embed?.author?.name?.startsWith('VeloCity · ')),hasImage:Boolean(embed?.image),attachments:attachments.length,hasTitleImage:attachments.some(a=>/^title-image\.(jpg|png|webp|gif)$/.test(a.filename||''))}));
+   console.log(JSON.stringify({event:'discord_news_skipped_bot_post',messageId:String(message.id),componentsV2:Boolean(Number(message.flags)&32768),componentCount:message.components?.length||0,embedCount:message.embeds?.length||0,webhook:Boolean(message.webhook_id),footerVersion:embed?.footer?.text==='VeloCity News · v1'?'v1':embed?.footer?.text==='VeloCity · Neuigkeiten & Changelog'?'v2':'other',markerUrlMatches:embed?.url==='https://microminer.github.io/VeloCity/neuigkeiten.html#discord-news-v2',authorMatches:Boolean(embed?.author?.name?.startsWith('VeloCity · ')),hasImage:Boolean(embed?.image),attachments:attachments.length,hasTitleImage:attachments.some(a=>/^title-image\.(jpg|png|webp|gif)$/.test(a.filename||''))}));
   }
   return null;
  }
- const image=await cacheDiscordNewsImage(message.id,structured);
- return {id:`discord-${message.id}`,source:'discord',sourceId:String(message.id),title:structured.title,category:structured.category,excerpt:structured.excerpt,content:structured.content,publishedAt:message.timestamp,image,url:`https://discord.com/channels/${process.env.DISCORD_GUILD_ID||'@me'}/${channel}/${message.id}`};
+ let image,gallery=[];
+ try{
+  image=await cacheDiscordNewsImage(message.id,structured);
+  for(const item of structured.gallery||[])gallery.push(await cacheDiscordAttachment(message.id,item));
+ }catch(error){
+  // One unreachable image must not stop the import or the Pages deployment.
+  // The previous version stays; the next run tries again.
+  console.log(`::warning::Discord-Bilder für Nachricht ${message.id} konnten nicht übernommen werden (${error.message}). Der nächste Abgleich versucht es erneut.`);
+  return {failed:true,id:`discord-${message.id}`};
+ }
+ return {id:`discord-${message.id}`,source:'discord',sourceId:String(message.id),title:structured.title,category:structured.category,excerpt:structured.excerpt,content:structured.content,publishedAt:message.timestamp,image,...(gallery.length?{gallery}:{}),url:`https://discord.com/channels/${process.env.DISCORD_GUILD_ID||'@me'}/${channel}/${message.id}`};
 }
 function convert(m) {
   if (!m || m.type !== 0 || !m.id || !m.timestamp) return null;
@@ -70,7 +79,7 @@ function convert(m) {
   if (!content) return null;
   const lines = content.split(/\r?\n/);
   const first = lines[0].trim();
-  const categoryTag = /^\[(Ankündigung|Update|Changelog|Wartung)\]\s*/i.exec(first);
+  const categoryTag = /^\[(Ankündigung|Update|Info|Changelog|Wartung)\]\s*/i.exec(first);
   const category = categoryTag
     ? [...categories].find(x => x.toLowerCase() === categoryTag[1].toLowerCase())
     : "Ankündigung";
@@ -102,6 +111,7 @@ if (process.env.NEWS_API_URL) {
     if(info.guild_id!==process.env.DISCORD_GUILD_ID)throw Error('Configured guild does not match the news channel.');
     for(const message of messages)if(message.type===0){
       const structured=await structuredPost(message);
+      if(structured?.failed)continue;
       await bridge.message({...message,guild_id:info.guild_id,channel_id:channel},structured?{image:structured.image?new URL(structured.image,process.env.NEWS_PUBLIC_BASE_URL||'https://microminer.github.io/VeloCity/').href:null}:{});
     }
     await bridge.heartbeat(true);
@@ -111,11 +121,12 @@ if (process.env.NEWS_API_URL) {
 }
 
 const fetchedIds = new Set(messages.map(m => String(m.id)));
-const incoming=[];
-for(const message of messages){const post=await structuredPost(message)||convert(message);if(post)incoming.push(post);}
+const incoming=[],failedIds=new Set();
+for(const message of messages){const post=await structuredPost(message)||convert(message);if(post?.failed)failedIds.add(post.id);else if(post)incoming.push(post);}
+const keptFailed = original.updates.filter(x => failedIds.has(x.id));
 const other = original.updates.filter(x => x.source !== "discord");
 const oldDiscord = original.updates.filter(x => x.source === "discord" && !fetchedIds.has(String(x.sourceId)));
-const merged = [...new Map([...other, ...oldDiscord, ...incoming].map(post=>[post.id,post])).values()]
+const merged = [...new Map([...other, ...oldDiscord, ...keptFailed, ...incoming].map(post=>[post.id,post])).values()]
   .sort((a,b) => Date.parse(b.publishedAt ?? 0) - Date.parse(a.publishedAt ?? 0));
 const oldComparable = JSON.stringify(original.updates);
 const newComparable = JSON.stringify(merged);
