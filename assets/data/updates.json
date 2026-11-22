@@ -1,7 +1,19 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T17:31:48.779Z",
+  "updatedAt": "2026-11-22T11:32:17.482Z",
   "updates": [
+    {
+      "id": "discord-1573899995566833774",
+      "source": "discord",
+      "sourceId": "1573899995566833774",
+      "title": "📢 VeloCity – Offizieller Start verschoben",
+      "category": "Info",
+      "excerpt": "",
+      "content": "Der ursprünglich für den 13. November geplante offizielle Start von VeloCity wird verschoben.\n\nIn den vergangenen Wochen haben wir intensiv an unserem Minecraft-Server gearbeitet und bereits grosse Fortschritte erzielt.\n\nDabei haben wir uns entschieden, lieber etwas mehr Zeit in den vollständigen Aufbau zu investieren, anstatt den Server mit einer noch unvollständigen Struktur zu veröffentlichen.\n\n🔧 Was bedeutet das für euch?\n\n🧱 Mehr Struktur: Wir arbeiten weiter an der Spielwelt, unseren Systemen und den grundlegenden Serverfunktionen.\n\n⚙️ Bessere Vorbereitung: Bestehende Funktionen werden getestet, verbessert und sinnvoll aufeinander abgestimmt.\n\n🚀 Ein gemeinsamer Start: Wir möchten euch möglichst von Anfang an ein vollständiges und durchdachtes Spielerlebnis bieten.\n\n🛡️ Langfristige Qualität: Stabilität, Spielspass und eine gute Grundlage für zukünftige Erweiterungen stehen im Vordergrund.\n\n📅 Wann geht es los?\n\nEin neuer offizieller Starttermin steht aktuell noch nicht fest. Sobald wir den Entwicklungsstand besser einschätzen können, informieren wir euch rechtzeitig.\n\nBis dahin halten wir euch mit Neuigkeiten und Einblicken in die Entwicklung auf dem Laufenden.\n\nWir sind überzeugt, dass sich die zusätzliche Zeit für uns alle lohnen wird!\n\nLieber bauen wir jetzt alles ordentlich auf, damit wir später gemeinsam richtig durchstarten können.\n\nVielen Dank für eure Geduld und Unterstützung! 💙\n\nEuer VeloCity-Team",
+      "publishedAt": "2026-11-22T03:16:40.591000+00:00",
+      "image": "assets/img/news/discord-1573899995566833774-1573899994992484402.png",
+      "url": "https://discord.com/channels/@me/1566486495303434350/1573899995566833774"
+    },
     {
       "id": "discord-1573740445622607972",
       "source": "discord",
