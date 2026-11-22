@@ -41,8 +41,9 @@ function validateDiscordNews(input,{contentLimit=4000}={}) {
   if(input.excerpt!=null&&(typeof input.excerpt!=='string'||input.excerpt.length>400))throw Error('Kurzbeschreibung: höchstens 400 Zeichen.');
   return {title:input.title.trim(),category:input.category,excerpt:(input.excerpt||'').trim(),content:input.content.trim()};
 }
-// Full-width components message: small category line, large title, display image,
-// separated body and a footer link. No container, so Discord uses the full width.
+// Full-width components message: small category line, large title, separated body,
+// display image below the text (as in the former embed) and a footer link.
+// No container, so Discord uses the full width.
 function discordNewsComponents(input,{cover=null,gallery=[],preview=false}={}) {
   const data=validateDiscordNews(input),ids=discordNewsIds;
   const text=(id,content)=>({type:10,id,content}),line=()=>({type:14,divider:true,spacing:2});
@@ -50,9 +51,9 @@ function discordNewsComponents(input,{cover=null,gallery=[],preview=false}={}) {
   return [
     text(ids.header,`-# ${discordNewsIcons[data.category]} VeloCity · ${data.category}`),
     text(ids.title,'# '+data.title),
-    ...(cover?[media(ids.cover,[cover],data.title)]:[]),
     line(),
     text(ids.content,data.content),
+    ...(cover?[media(ids.cover,[cover],data.title)]:[]),
     ...(gallery.length?[media(ids.gallery,gallery)]:[]),
     line(),
     text(ids.footer,`-# ${discordNewsFooter}${preview?' · Vorschau':''} · [Alle News auf der Website](${discordNewsV3Url})`),

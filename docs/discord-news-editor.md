@@ -244,9 +244,13 @@ volle Breite des Chats statt der schmalen Embed-Box:
 1. kleine Kopfzeile mit Kategorie-Symbol (📢 Ankündigung, 🔄 Update, ℹ️ Info,
    📝 Changelog, 🛠️ Wartung),
 2. grosser Titel (`# Titel`),
-3. Anzeigebild in voller Breite,
-4. Trennlinie, Beitragsinhalt (Zwischentitel mit `##` werden gross dargestellt),
+3. Trennlinie, Beitragsinhalt (Zwischentitel mit `##` werden gross dargestellt),
+4. Anzeigebild unter dem Text (wie beim früheren Embed),
 5. Trennlinie und kleine Fusszeile mit Link zur News-Seite.
+
+Die Anzeigegrösse des Bildes bestimmt Discord anhand des Seitenverhältnisses;
+sie lässt sich nicht einstellen. Querformat 16:9 (z. B. 1600 × 900) wirkt am
+ruhigsten und passt zum Titelbild-Zuschnitt der Website.
 
 Die frühere farbige Seitenlinie entfällt, weil sie nur mit der schmaleren
 Container-Box möglich ist; die Kategorie ist am Symbol erkennbar. Private

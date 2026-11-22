@@ -81,7 +81,7 @@ test('five modal fields without excerpt, limits, full-width private preview, pre
   const values={title:'T'.repeat(160),content:'C'.repeat(3500),category:'Info'};
   const preview=await s.submit(modal,values,true,2);assert.equal(preview.type,4);assert.equal(preview.data.flags,64|32768);assert.equal(preview.data.content,undefined);assert.equal(preview.data.embeds,undefined);
   const byId=id=>preview.data.components.find(c=>c.id===id);
-  assert.equal(byId(102).content,'# '+values.title);assert.equal(byId(104).content,values.content,'maximum content fits without shortening');assert.match(byId(101).content,/^-# ℹ️ VeloCity · Info$/);assert.equal(byId(103).type,12);
+  assert.equal(byId(102).content,'# '+values.title);assert.equal(byId(104).content,values.content,'maximum content fits without shortening');assert.match(byId(101).content,/^-# ℹ️ VeloCity · Info$/);assert.equal(byId(103).type,12);assert.ok(preview.data.components.indexOf(byId(103))===preview.data.components.indexOf(byId(104))+1,'display image follows the text');
   assert.ok(!preview.data.components.some(c=>c.type===17),'no narrow container');assert.ok(discordTextLength(preview.data.components)<=4000);
   assert.match(preview.data.text,/2 weitere Bilder · nur auf der Website/);assert.equal(preview.data.components.filter(c=>c.type===12).at(-1).items.length,2);
   assert.equal(actions(preview.data).components.length,4);assert.deepEqual(preview.data.allowed_mentions,{parse:[]});
