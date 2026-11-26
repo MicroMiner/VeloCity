@@ -2087,12 +2087,9 @@ select:focus-visible {
   }
 }
 
-/* Footer: the CorePoint team hosts VeloCity. An optional .host-logo image
-   sits in front of the name once the logo file is available. */
-.host-credit { display: inline-flex; align-items: center; gap: 6px; }
-.host-name { color: var(--gold); font-weight: 650; }
-.host-logo { display: block; flex: none; width: 1.6em; height: 1.6em; border-radius: 6px; box-shadow: 0 0 0 1px rgba(120, 140, 255, 0.25); }
-.host-credit .host-logo { margin-left: 2px; }
+/* Footer: VeloCity is a product of the CorePoint team (text only; the logo
+   is shown on the home page). */
+.product-name { color: var(--gold); font-weight: 650; }
 
 /* Smartphones: the layout switch has no effect below 721px, and the swap
    button is wider and flatter, matching the desktop proportions. */

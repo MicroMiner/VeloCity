@@ -157,6 +157,36 @@
 .home-page .home-ornament::after { transform: rotate(180deg); }
 .home-page .home-ornament span { width: 13px; height: 13px; border: 3px solid var(--accent-gold); transform: rotate(45deg); box-shadow: 0 0 12px rgba(255,210,31,0.12); }
 .home-page .home-noscript { text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+/* CorePoint: VeloCity is a product of the team behind CorePoint. */
+.home-page .home-corepoint {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+  margin-top: 20px;
+  padding: 22px 28px;
+  border: 1px solid #42678a;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(23,49,77,0.94), rgba(9,29,50,0.94));
+  box-shadow: inset 0 1px 0 rgba(139,190,231,0.05), 0 8px 20px rgba(3,12,25,0.15);
+}
+.home-page .home-corepoint-logo { display: block; width: 84px; height: 84px; border-radius: 18px; box-shadow: 0 0 0 1px rgba(124,140,255,0.3), 0 0 22px rgba(96,120,255,0.18); }
+.home-page .home-corepoint-brand { padding-right: 28px; border-right: 1px solid #42678a; }
+.home-page .home-corepoint-eyebrow { margin: 0; color: var(--text-secondary); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.home-page .home-corepoint-name { margin: 2px 0 0; font-size: clamp(1.7rem, 2.2vw, 2.3rem); font-weight: 850; line-height: 1.1; letter-spacing: -0.01em; color: var(--text-primary); }
+.home-page .home-corepoint-name span { background: linear-gradient(90deg, #4f8dff, #a64dff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.home-page .home-corepoint-tag { margin: 4px 0 0; color: #b8c0f5; font-size: 0.78rem; letter-spacing: 0.32em; text-transform: uppercase; }
+.home-page .home-corepoint-text { margin: 0; max-width: 560px; color: var(--text-secondary); font-size: 1rem; line-height: 1.55; }
+@media (max-width: 1000px) {
+  .home-page .home-corepoint { grid-template-columns: auto minmax(0, 1fr); gap: 16px 22px; }
+  .home-page .home-corepoint-brand { padding-right: 0; border-right: 0; }
+  .home-page .home-corepoint-text { grid-column: 1 / -1; max-width: none; }
+}
+@media (max-width: 600px) {
+  .home-page .home-corepoint { margin-top: 16px; padding: 20px; }
+  .home-page .home-corepoint-logo { width: 64px; height: 64px; border-radius: 14px; }
+  .home-page .home-corepoint-tag { letter-spacing: 0.22em; }
+}
 /* Economy card on desktop: short feature list, left-aligned action and the
    same pixel skyline as the neighbouring cards. Tablet and phone unchanged. */
 .home-page .home-economy-points { display: none; }
