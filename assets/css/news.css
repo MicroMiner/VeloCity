@@ -15,8 +15,12 @@
 .news-page .news-blog-card img { width: 100%; height: 100%; min-height: 175px; max-height: 250px; object-fit: cover; border-radius: 10px; }
 .news-page .news-card-copy { display: flex; flex-direction: column; min-width: 0; padding: 0 0 2px; }
 .news-page .news-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: .8rem; color: var(--text-secondary); }
-.news-page .news-category { display: inline-flex; padding: 2px 10px; border: 1px solid var(--accent-gold); border-radius: 10px; background: var(--accent-gold); color: #182233; font-size: .8rem; font-weight: 750; }
-.news-page .news-category[data-category="Info"] { background: transparent; color: var(--text-primary); border-color: #a9c7eb; }
+.news-page .news-category { display: inline-flex; padding: 2px 10px; border: 1px solid rgba(255,210,31,.55); border-radius: 999px; background: rgba(255,210,31,.14); color: var(--accent-gold); font-size: .8rem; font-weight: 750; }
+/* Each category has its own colour; Update keeps the gold accent. */
+.news-page .news-category[data-category="Info"] { background: rgba(169,199,235,.1); color: #d5e2f2; border-color: #7f9fc4; }
+.news-page .news-category[data-category="Changelog"] { background: rgba(100,239,173,.12); color: var(--success); border-color: rgba(100,239,173,.5); }
+.news-page .news-category[data-category="Ankündigung"] { background: rgba(75,205,235,.12); color: #4bcdeb; border-color: rgba(75,205,235,.5); }
+.news-page .news-category[data-category="Wartung"] { background: rgba(255,115,129,.12); color: var(--danger); border-color: rgba(255,115,129,.5); }
 .news-page .news-blog-card h2 { margin: 10px 0 6px; line-height: 1.3; font-size: clamp(1.1rem,1.5vw,1.4rem); overflow-wrap: anywhere; }
 .news-page .news-card-copy p { margin: 0 0 12px; color: var(--text-secondary); font-size: .95rem; line-height: 1.55; overflow-wrap: anywhere; }
 .news-page .news-read-more { align-self: end; margin-top: auto; color: var(--accent-gold); font-size: .9rem; font-weight: 750; text-decoration: none; padding: 6px 2px; }
@@ -138,3 +142,17 @@
 .news-page #postImageCanvas {max-width:640px;margin-inline:auto;}
 .news-page .news-image-fit-actions {display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
 .news-page #postImageScale {float:right;font-variant-numeric:tabular-nums;color:var(--text-primary);}
+
+/* Sidebar: category filter and an unobtrusive admin entry for the team. */
+.news-page .news-filter { display: block; }
+.news-page .news-filter h2 { margin: 0 0 12px; }
+.news-page .news-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.news-page .news-filter-chip { padding: 5px 12px; border: 1px solid #42678a; border-radius: 999px; background: transparent; color: var(--text-secondary); font: inherit; font-size: .82rem; cursor: pointer; }
+.news-page .news-filter-chip:hover { border-color: #7f9fc4; color: var(--text-primary); }
+.news-page .news-filter-chip[aria-pressed="true"] { border-color: var(--accent-gold); background: rgba(255,210,31,.08); color: var(--text-primary); }
+.news-page .news-admin-entry { padding: 0 4px; }
+.news-page .news-admin-link { display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; border: 0; background: none; color: #7f93ab; font: inherit; font-size: .8rem; cursor: pointer; }
+.news-page .news-admin-link svg { width: 14px; height: 14px; }
+.news-page .news-admin-link:hover:not(:disabled) { color: var(--text-primary); }
+.news-page .news-admin-link:disabled { opacity: .7; cursor: default; }
+.news-page .news-blog-card[data-filtered] { display: none; }

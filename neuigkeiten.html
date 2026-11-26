@@ -14,9 +14,9 @@
       sizes="48x48"
       href="assets/images/favicon.png"
     />
-    <link rel="stylesheet" href="assets/css/styles.css?v=corepoint-4" />
+    <link rel="stylesheet" href="assets/css/styles.css?v=design-review-1" />
     <link rel="stylesheet" href="assets/css/portal.css?v=desktop-density-1" />
-    <link rel="stylesheet" href="assets/css/news.css?v=news-gallery-1" />
+    <link rel="stylesheet" href="assets/css/news.css?v=news-design-1" />
   </head>
   <body class="site-page portal-page news-page">
     <div class="wrap">
@@ -53,17 +53,19 @@
                 <div id="newsList" class="news-list" aria-live="polite"><p class="muted">Neuigkeiten werden geladen …</p></div>
                 <button id="moreNews" class="news-button" type="button" hidden>Weitere Beiträge laden</button>
               </section>
-              <aside class="news-sidebar" aria-label="Discord und Beitragsverwaltung">
+              <aside class="news-sidebar" aria-label="Discord, Kategorien und Beitragsverwaltung">
                 <section class="news-side-card">
                   <svg class="discord-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.2a18 18 0 0 0-4.4-1.4l-.5 1a17 17 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.4C1.5 9.5.8 13.7 1.2 17.8a18 18 0 0 0 5.5 2.7l1.1-1.8-1.7-.9.4-.3c3.6 1.6 7.4 1.6 11 0l.4.3-1.7.9 1.1 1.8a18 18 0 0 0 5.5-2.7c.5-4.8-.8-8.9-3.1-12.6ZM8.4 14.9c-1 0-1.8-1-1.8-2.1s.8-2.1 1.8-2.1 1.8 1 1.8 2.1-.8 2.1-1.8 2.1Zm7.2 0c-1 0-1.8-1-1.8-2.1s.8-2.1 1.8-2.1 1.8 1 1.8 2.1-.8 2.1-1.8 2.1Z"/></svg>
                   <div><h2>Discord-Anbindung</h2><p>Neuigkeiten werden automatisch aus unserem Discord übernommen.</p></div>
                   <div class="news-side-actions"><a id="discordInvite" class="news-button" href="#" rel="noopener noreferrer" target="_blank" hidden>Zum Discord ↗</a></div>
                 </section>
-                <section class="news-side-card">
-                  <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m15 3 6 6M3 21l2-7L17 2l5 5L10 19l-7 2Z"/></svg>
-                  <div><h2>Admin-Bereich</h2><p>Manuell einen neuen Beitrag erstellen oder vorhandene Beiträge verwalten.</p></div>
-                  <button id="openNewsAdmin" aria-controls="newsAdminPanel" aria-expanded="false" class="news-button news-button-gold" type="button" disabled>✎ Beitrag erstellen</button>
+                <section id="newsFilter" class="news-side-card news-filter" aria-labelledby="newsFilterTitle" hidden>
+                  <h2 id="newsFilterTitle">Kategorien</h2>
+                  <div id="newsFilterChips" class="news-filter-chips" role="group" aria-label="Beiträge nach Kategorie filtern"></div>
                 </section>
+                <div class="news-admin-entry">
+                  <button id="openNewsAdmin" aria-controls="newsAdminPanel" aria-expanded="false" class="news-admin-link" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Admin-Anmeldung</button>
+                </div>
               </aside>
             </div>
           </div>
@@ -133,5 +135,6 @@
     <script src="config.js?v=auth-check-1" defer></script>
     <script src="assets/js/site-config.js?v=feed-source-1" defer></script>
     <script src="assets/js/news.js?v=news-gallery-1" type="module"></script>
+    <script src="assets/js/news-filter.js?v=news-filter-1" type="module"></script>
   </body>
 </html>
