@@ -949,23 +949,6 @@ select:focus-visible {
   margin: 0;
   accent-color: var(--gold);
 }
-.quantity-shortcuts {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 4px;
-  margin-top: 6px;
-  max-width: 210px;
-}
-.quantity-shortcuts .btn {
-  min-width: 0;
-  padding: 5px 2px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  line-height: 1.2;
-}
-.quantity-shortcuts .quantity-clear {
-  color: #ffb9b9;
-}
 .result .icon-button {
   display: inline-flex;
   align-items: center;
@@ -2090,7 +2073,6 @@ select:focus-visible {
 .converter-wrapper .converter-layout input { height: 40px; min-height: 0; padding: 8px 10px; font-size: 0.95rem; }
 .converter-wrapper .converter-layout .fieldrow { margin-top: 12px; padding-top: 0; }
 .converter-wrapper .item-price-row { padding: 4px 8px; font-size: 0.85rem; }
-.converter-wrapper .quantity-shortcuts .btn { padding: 4px 9px; min-height: 26px; }
 
 /* A stable three-line result in either converter layout. */
 .result-value-line { display: block; text-align: center; }
