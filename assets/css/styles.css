@@ -2091,7 +2091,8 @@ select:focus-visible {
    sits in front of the name once the logo file is available. */
 .host-credit { display: inline-flex; align-items: center; gap: 6px; }
 .host-name { color: var(--gold); font-weight: 650; }
-.host-logo { display: block; width: auto; height: 1.4em; }
+.host-logo { display: block; flex: none; width: 1.6em; height: 1.6em; border-radius: 6px; box-shadow: 0 0 0 1px rgba(120, 140, 255, 0.25); }
+.host-credit .host-logo { margin-left: 2px; }
 
 /* Smartphones: the layout switch has no effect below 721px, and the swap
    button is wider and flatter, matching the desktop proportions. */
