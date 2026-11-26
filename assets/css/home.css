@@ -157,6 +157,22 @@
 .home-page .home-ornament::after { transform: rotate(180deg); }
 .home-page .home-ornament span { width: 13px; height: 13px; border: 3px solid var(--accent-gold); transform: rotate(45deg); box-shadow: 0 0 12px rgba(255,210,31,0.12); }
 .home-page .home-noscript { text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+/* Economy card on desktop: short feature list, left-aligned action and the
+   same pixel skyline as the neighbouring cards. Tablet and phone unchanged. */
+.home-page .home-economy-points { display: none; }
+@media (min-width: 1001px) {
+  .home-page .home-feature-economy { display: flex; flex-direction: column; }
+  .home-page .home-economy-points { position: relative; z-index: 1; display: grid; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; color: var(--text-secondary); font-size: 1rem; }
+  .home-page .home-economy-points li { display: flex; align-items: center; gap: 12px; }
+  .home-page .home-economy-points li::before { content: ""; flex: none; width: 6px; height: 6px; border: 2px solid var(--accent-gold); transform: rotate(45deg); }
+  .home-page .home-economy-link { position: relative; z-index: 1; margin: 26px 0 0; }
+  .home-page .home-feature-economy::after { content: ""; position: absolute; inset: auto 0 0; height: 88px; background: #123b57; opacity: 0.45; clip-path: polygon(0 62%,6% 62%,6% 48%,11% 48%,11% 70%,18% 70%,18% 82%,30% 82%,30% 90%,44% 90%,44% 76%,52% 76%,52% 58%,58% 58%,58% 40%,64% 40%,64% 26%,70% 26%,70% 14%,77% 14%,77% 30%,83% 30%,83% 46%,90% 46%,90% 58%,100% 58%,100% 100%,0 100%); pointer-events: none; }
+}
+@media (min-width: 1251px) {
+  /* Align list and button with the title, past the icon and its divider. */
+  .home-page .home-economy-points,
+  .home-page .home-economy-link { margin-left: 101px; }
+}
 @media (max-width: 1250px) {
   .home-page .home-shell { padding-inline: 28px; }
   .home-page .home-hero { margin-inline: -28px; padding-inline: 38px; }
