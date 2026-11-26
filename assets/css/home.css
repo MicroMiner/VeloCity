@@ -203,6 +203,31 @@
   .home-page .home-economy-points,
   .home-page .home-economy-link { margin-left: 101px; }
 }
+/* Gallery card: small preview strip of the first images. */
+.home-page .home-gallery-preview { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+.home-page .home-gallery-preview[hidden] { display: none; }
+.home-page .home-gallery-preview img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid #42678a; border-radius: 8px; }
+/* Desktop cards: content stays clear of the pixel skyline and the actions of
+   all three cards share one baseline at the bottom. */
+@media (min-width: 1001px) {
+  .home-page .home-feature { display: flex; flex-direction: column; }
+  .home-page .home-features .home-feature { padding-bottom: 76px; }
+  .home-page .home-feature::after { height: 60px; }
+  .home-page .home-feature-body { display: flex; flex: 1; flex-direction: column; align-items: flex-start; }
+  .home-page .home-feature-body > :is(.home-button, .home-news-link),
+  .home-page .home-economy-link { margin-top: auto; }
+  .home-page .home-economy-points { margin-bottom: 26px; }
+  .home-page .home-gallery-preview { align-self: stretch; margin-bottom: 20px; }
+  .home-page .news-preview p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+  .home-page #newsList { margin-bottom: 14px; }
+}
+@media (max-width: 1000px) {
+  /* Tablet and phone: keep news and gallery content above the skyline. */
+  .home-page .home-features .home-feature-news,
+  .home-page .home-features .home-feature-gallery { padding-bottom: 68px; }
+  .home-page .home-feature-news::after,
+  .home-page .home-feature-gallery::after { height: 52px; }
+}
 @media (max-width: 1250px) {
   .home-page .home-shell { padding-inline: 28px; }
   .home-page .home-hero { margin-inline: -28px; padding-inline: 38px; }
