@@ -143,6 +143,11 @@ try {
     button.addEventListener("click", () => showImage(index));
     grid.append(button);
   }
+  // A category chip only carries information when there is more than one.
+  grid.classList.toggle(
+    "single-category",
+    new Set(images.map((image) => (categoryNames.has(image.category) ? image.category : "Sonstiges"))).size < 2,
+  );
   if (!images.length)
     grid.append(element("p", "muted", "Derzeit sind keine Bilder verfügbar."));
   if (images.length < raw.length)

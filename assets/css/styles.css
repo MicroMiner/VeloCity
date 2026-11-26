@@ -2116,3 +2116,22 @@ select:focus-visible {
   .converter-layout .target-fieldrow { grid-template-columns: minmax(0, 1fr); }
   .converter-layout .target-fieldrow > div { grid-column: auto; }
 }
+
+/* Converter, tablet and desktop: Sell, Buy and Grundwert as three tiles side
+   by side; both item cards share one structure without an empty column. */
+@media (min-width: 721px) {
+  .converter-layout .fieldrow,
+  .converter-layout .target-fieldrow { grid-template-columns: minmax(0, 1fr); }
+  .converter-layout .target-fieldrow > div { grid-column: auto; }
+  .converter-layout .rate { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .converter-layout .item-price-row { flex-direction: column; align-items: flex-start; gap: 2px; padding: 6px 10px; }
+  .converter-layout .item-price-label { font-size: 0.78rem; color: var(--text-secondary); }
+  /* Layout 2: both item cards start at the top, even when heights differ. */
+  .converter-layout-two .converter-layout > .card,
+  .converter-layout-two .converter-layout .card:has(.item-picker) { justify-content: flex-start; }
+}
+/* Phones and tablets: the three result actions stay in one row. */
+@media (min-width: 361px) and (max-width: 1099px) {
+  .conversion-result-content .flex { flex-wrap: nowrap; justify-content: center; gap: 6px; }
+  .conversion-result-content .btn { padding: 9px 10px; font-size: 0.85rem; white-space: nowrap; }
+}

@@ -47,3 +47,7 @@ html.gallery-viewer-open,html.gallery-viewer-open body {overflow:hidden;}
 @media(max-width:760px){.gallery-heading{align-items:flex-start;flex-direction:column;gap:6px}.gallery-page .gallery-grid{gap:18px}.gallery-shell{padding:0 16px 20px}.gallery-page .gallery-hero{margin-inline:-16px;padding:28px 22px}.gallery-page .gallery-caption{padding:14px 16px}}
 @media(max-width:600px){.gallery-page .gallery-dialog figcaption{padding-inline:24px;padding-bottom:max(20px,env(safe-area-inset-bottom))}.gallery-page .gallery-viewer-button{width:44px;height:44px}.gallery-previous{left:8px}.gallery-next{right:8px}.gallery-page #galleryImageStatus:not(:empty){max-width:calc(100% - 120px);width:260px;font-size:.85rem}}
 @media(prefers-reduced-motion:reduce){.gallery-page .gallery-card,.gallery-media img{transition:none}.gallery-page .gallery-card:hover,.gallery-card:hover .gallery-media img{transform:none}}
+
+/* Hide the category chip while all images share one category; compact captions. */
+.gallery-page .gallery-grid.single-category .gallery-category { display: none; }
+.gallery-page .gallery-grid.single-category .gallery-caption { padding: 12px 16px; }
