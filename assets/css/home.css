@@ -297,3 +297,6 @@
 @media (prefers-reduced-motion: reduce) {
   .home-page .home-button { transition: none; }
 }
+/* Short feature tags under the introduction. */
+.home-page .home-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+.home-page .home-tags li { padding: 5px 12px; border: 1px solid #42678a; border-radius: 999px; background: rgba(5,19,36,0.6); color: #d5e2f2; font-size: 0.85rem; line-height: 1.3; }
