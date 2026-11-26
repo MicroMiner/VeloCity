@@ -671,19 +671,6 @@ for (const side of ["from", "to"])
   itemPickers[side] = createItemPicker(side, () => update());
 itemPickers.edit = createItemPicker("edit", () => syncEditor());
 $("fromQty").addEventListener("input", () => update());
-$("quantityShortcuts").addEventListener("click", (e) => {
-  const button = e.target.closest("button[data-amount]");
-  if (!button) return;
-  const amount = num($("fromQty").value) + Number(button.dataset.amount);
-  if (!Number.isFinite(amount)) return;
-  $("fromQty").value = amount;
-  update();
-});
-$("clearQty").addEventListener("click", () => {
-  $("fromQty").value = "";
-  update();
-  $("fromQty").focus();
-});
 $("useResult").addEventListener("click", () => {
   if (!latestConversion) return;
   const { itemId, amount } = latestConversion,

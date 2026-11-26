@@ -77,15 +77,8 @@ await p.locator('#fromQty').fill('7');await p.locator('#shopMode').check();
 await p.locator('#swap').click();assert.equal(await p.locator('#fromQty').inputValue(),'7');assert.equal(await p.locator('#fromItem').inputValue(),'DIRT');assert.equal(await p.locator('#toItem').inputValue(),'DIAMOND');await assertResult(0,true);
 await p.locator('#reset').click();assert.equal(await p.locator('#shopMode').isChecked(),false);await assertResult(500);
 console.log('PASS result-only target quantity, preserved source amount on swap, Sell/Sell comparison, Sell/Buy shop, fractional values, rounding, remainder, zero and reset');
-// Quick quantities add to the manual input; clearing leaves the input empty.
-assert.equal(await p.locator('#quantityShortcuts button[data-amount]').count(),9);
-await p.locator('#clearQty').click();assert.equal(await p.locator('#fromQty').inputValue(),'');await assertResult(0);
-let quickTotal=0;
-for(const value of [1,3,5,10,15,20,30,50,100]){
- await p.locator(`#quantityShortcuts [data-amount="${value}"]`).click();quickTotal+=value;assert.equal(Number(await p.locator('#fromQty').inputValue()),quickTotal);
-}
-await p.locator('#quantityShortcuts [data-amount="3"]').dblclick();assert.equal(Number(await p.locator('#fromQty').inputValue()),quickTotal+6);
-await p.locator('#fromQty').fill('12');await p.locator('#quantityShortcuts [data-amount="10"]').click();assert.equal(await p.locator('#fromQty').inputValue(),'22');
+// The quantity is entered manually only; no quick-amount buttons.
+assert.equal(await p.locator('#quantityShortcuts, #clearQty, [data-amount]').count(),0);
 // Carry the actual result, including thousands and fractional values, to source.
 await p.locator('#fromQty').fill('100');await p.locator('#fromSearch').fill('Diamant');await assertResult(50000);
 assert.equal((await p.locator('#useResult').textContent()).trim(),'');
@@ -93,14 +86,9 @@ await p.locator('#useResult').click();assert.equal(await p.locator('#fromItem').
 await p.locator('#fromQty').fill('1');await selectItem('toItem','DIAMOND');await p.locator('#useResult').click();assert.equal(await p.locator('#fromItem').inputValue(),'DIAMOND');assert.equal(await p.locator('#fromQty').inputValue(),'0.002');assert.equal(await p.locator('#toItem').inputValue(),'DIRT');await assertResult(1);
 await selectItem('fromItem','DIRT');await selectItem('toItem','STONE');await p.locator('#fromQty').fill('501');await p.locator('#shopMode').check();await assertResult(stoneCount,true);
 await p.locator('#useResult').click();assert.equal(await p.locator('#fromItem').inputValue(),'STONE');assert.equal(Number(await p.locator('#fromQty').inputValue()),stoneCount);assert.equal(await p.locator('#toItem').inputValue(),'DIRT');await assertResult(Math.floor(stoneCount*stone.sell/dirt.buy+1e-10),true);
-await p.locator('#clearQty').click();await p.locator('#useResult').click();assert.equal(await p.locator('#fromQty').inputValue(),'0');await assertResult(0,true);
+await p.locator('#fromQty').fill('');await p.locator('#useResult').click();assert.equal(await p.locator('#fromQty').inputValue(),'0');await assertResult(0,true);
 await p.locator('#reset').click();
-console.log('PASS additive shortcuts, repeated clicks, manual input, clearing, and result carry with whole, fractional and zero quantities');
-for(const [width,height] of [[1280,720],[1366,768],[390,844]]){
- await p.setViewportSize({width,height});
- assert.ok(await p.locator('#quantityShortcuts').evaluate(e=>{const keys=e.getBoundingClientRect(),card=e.closest('section').getBoundingClientRect();return keys.bottom<=card.bottom+1&&keys.right<=card.right+1;}),'Quantity buttons fit inside their card');
-}
-await p.locator('#clearQty').click();await p.locator('#quantityShortcuts [data-amount="50"]').click();assert.equal(await p.locator('#fromQty').inputValue(),'50');
+console.log('PASS manual input, clearing, and result carry with whole, fractional and zero quantities');
 await p.setViewportSize({width:1280,height:720});await p.locator('#reset').click();
 
 assert.equal(await p.locator('#adminInner').evaluate(e=>e.inert),true);assert.equal(await p.locator('#priceList').isDisabled(),true);assert.equal(await p.locator('#priceList').evaluate(e=>!!e.closest('#adminInner')),true);
