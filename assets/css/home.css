@@ -203,10 +203,14 @@
   .home-page .home-economy-points,
   .home-page .home-economy-link { margin-left: 101px; }
 }
-/* Gallery card: small preview strip of the first images. */
-.home-page .home-gallery-preview { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+/* Gallery card: 2 x 2 preview of the first images; the last tile shows how
+   many more images the gallery holds. The description stays on two lines. */
+.home-page .home-gallery-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.home-page .home-gallery-preview { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; text-decoration: none; }
 .home-page .home-gallery-preview[hidden] { display: none; }
-.home-page .home-gallery-preview img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid #42678a; border-radius: 8px; }
+.home-page .home-gallery-tile { position: relative; display: block; min-width: 0; }
+.home-page .home-gallery-tile img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid #42678a; border-radius: 10px; }
+.home-page .home-gallery-more { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 10px; background: rgba(6,18,34,0.66); color: var(--text-primary); font-size: 1rem; font-weight: 750; }
 /* Desktop cards: content stays clear of the pixel skyline and the actions of
    all three cards share one baseline at the bottom. */
 @media (min-width: 1001px) {
